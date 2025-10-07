@@ -113,7 +113,7 @@ int main()
                 std::cout << "Input Xb: ";
                 std::cin >> Xb;
             }
-            std::cout << "Result: " << DH(p, g, Xa, Xb);
+            std::cout << "Result: " << DH(p, g, Xa, Xb) << '\n';
             break;
         }
         }

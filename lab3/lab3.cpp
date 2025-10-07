@@ -123,7 +123,13 @@ int step(int a, int y, int p)
 }
 
 int DH(int p, int g, int Xa, int Xb ){
-    
-return 0;
+    int Ya = 0, Yb = 0, Za = 0, Zb = 0;
+    Ya = fast_power(g, Xa, p);
+    Yb = fast_power(g, Xb, p);
+    Za = fast_power(Yb, Xa, p);
+    Zb = fast_power(Ya, Xb, p);
+    if (Za==Zb)
+        return 1;
+    return 0;
     
 }
