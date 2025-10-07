@@ -1,4 +1,4 @@
-#include "lab3.hpp"
+#include "lab4.hpp"
 #include <iostream>
 
 // #include <math.h>
@@ -117,7 +117,30 @@ int main()
                 std::cout << "Bob received message\n";
             else
                 std::cout << "Bod received incorrect message\n";
-            // std::cout << "Result: " << DH(p, g, Xa, Xb) << '\n';
+            break;
+        }
+        case '6': {
+            
+            // p = 0;
+            // int m = 0, Ca = 0, Cb = 0;
+            
+            // int flag_rand_DH = 1;
+            // std::cout << "Input p (0 for random): ";
+            // std::cin >> p;
+            // if (p == 0)
+            //     flag_rand_DH = 0;
+            // if (flag_rand_DH) {
+            //     std::cout << "Input g: ";
+            //     std::cin >> g;
+            //     std::cout << "Input Xa: ";
+            //     std::cin >> Xa;
+            //     std::cout << "Input Xb: ";
+            //     std::cin >> Xb;
+            // }
+            // if(DH(p, g, Xa, Xb))
+            //     std::cout << "Bob received message\n";
+            // else
+            //     std::cout << "Bod received incorrect message\n";
             break;
         }
         }
