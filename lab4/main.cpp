@@ -13,7 +13,7 @@ int main()
     int a = 0, x = 0, p = 0, res = 0, y = 0, b = 0;
     while (flag) {
         std::cout << "Choose task: \n\t1: Fast_power\n\t2: Ferma\n\t3: "
-                     "Euclid\n\t4: Shanks step\n\t5: DH sys:\n";
+                     "Euclid\n\t4: Shanks step\n\t5: DH sys\n\t6: Shamir\n";
         std::cin >> input;
         switch (input) {
         case '1': {
@@ -121,22 +121,25 @@ int main()
         }
         case '6': {
             
-            // p = 0;
-            // int m = 0, Ca = 0, Cb = 0;
+            p = 0;
+            int Ca = 0, Cb = 0;
             
-            // int flag_rand_DH = 1;
-            // std::cout << "Input p (0 for random): ";
-            // std::cin >> p;
-            // if (p == 0)
-            //     flag_rand_DH = 0;
-            // if (flag_rand_DH) {
-            //     std::cout << "Input g: ";
-            //     std::cin >> g;
-            //     std::cout << "Input Xa: ";
-            //     std::cin >> Xa;
+            int flag_rand_DH = 1;
+            std::cout << "Input p (0 for random): ";
+            std::cin >> p;
+            if (p == 0)
+                flag_rand_DH = 0;
+            if (flag_rand_DH) {
+                std::cout << "Input Ca: ";
+                std::cin >> Ca;
+                std::cout << "Input Cb: ";
+                std::cin >> Cb;
             //     std::cout << "Input Xb: ";
             //     std::cin >> Xb;
-            // }
+            }
+            std::fstream alice("Alice", std::ios::binary | std::ios::out);
+            std::fstream bob("Bob", std::ios::binary | std::ios::out);
+            std::fstream text("text.txt", )
             // if(DH(p, g, Xa, Xb))
             //     std::cout << "Bob received message\n";
             // else

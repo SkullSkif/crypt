@@ -160,7 +160,7 @@ int DH(int p, int g, int Xa, int Xb ){
     return 0;
 }
 
-int Shamir(int m, int p, int Ca, int Cb){
+int Shamir(std::fstream alice, std::fstream bob, std::fstream text, std::ofstream result, int p, int Ca, int Cb){
     int x1 = 0, x2 = 0, x3 = 0, x4 = 0, Da = 0, Db = 0;
     std::random_device rd;
     std::mt19937 gen(rd());
