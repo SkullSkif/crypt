@@ -13,7 +13,7 @@ int main()
     int a = 0, x = 0, p = 0, res = 0, y = 0, b = 0;
     while (flag) {
         std::cout << "Choose task: \n\t1: Fast_power\n\t2: Ferma\n\t3: "
-                     "Euclid\n\t4: Shanks step\n\t5: DH sys:\n";
+                     "Euclid\n\t4: Shanks step\n\t5: DH sys:\n\t6: Shamir\n";
         std::cin >> input;
         switch (input) {
         case '1': {

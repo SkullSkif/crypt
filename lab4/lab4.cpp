@@ -160,36 +160,52 @@ int DH(int p, int g, int Xa, int Xb ){
     return 0;
 }
 
-int Shamir(int m, int p, int Ca, int Cb){
-    int x1 = 0, x2 = 0, x3 = 0, x4 = 0, Da = 0, Db = 0;
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dist(1000, 1000000);
-    int q = p-1;    
-    // for(int temp = dist(gen); gen_euclid(&temp, &q) != 1; temp = dist(gen)){
-    //     Da = temp;
-    // }
-    int flag = 1;
-    int res = 0;
-    while(flag){
-        int temp = dist(gen);
-        Da = temp;
-        res = gen_euclid(&temp, &q);
-        if (res == 1){
-            if(temp < 0)
-                Db = temp + (p-1);
-            else
-                Db = temp;
-            flag = 0;
-        }
-    }
+// int Shamir_encrypt(int m, int p, int Ca, int Cb){
+//     int x1 = 0, x2 = 0, x3 = 0, x4 = 0, Da = 0, Db = 0;
+//     std::random_device rd;
+//     std::mt19937 gen(rd());
+//     std::uniform_int_distribution<> dist(1000, 1000000);
+//     int q = p-1;    
+//     // for(int temp = dist(gen); gen_euclid(&temp, &q) != 1; temp = dist(gen)){
+//     //     Da = temp;
+//     // }
+//     int flag = 1;
+//     int res = 0;
+//     while(flag){
+//         int temp = dist(gen);
+//         Da = temp;
+//         res = gen_euclid(&temp, &q);
+//         if (res == 1){
+//             if(temp < 0)
+//                 Db = temp + (p-1);
+//             else
+//                 Db = temp;
+//             flag = 0;
+//         }
+//     }
 
+//     x1 = fast_power(m, Ca, p);
+//     x2 = fast_power(x1, Cb, p);
+//     x3 = fast_power(x2, Da, p);
+//     x4 = fast_power(x3, Db, p);
+//     if(x4==m)
+//         return 1;
+//     return 0;
+
+// }
+
+int Shamir_encrypt(int m, int p, int Ca, int Cb, int Da, int Db){
+    int x1 = 0, x2 = 0, x3 = 0;
     x1 = fast_power(m, Ca, p);
     x2 = fast_power(x1, Cb, p);
     x3 = fast_power(x2, Da, p);
-    x4 = fast_power(x3, Db, p);
-    if(x4==m)
-        return 1;
-    return 0;
+    return x3;
+}
 
+int Shamir_decrypt(int m, int p, int Ca, int Cb, int Da, int Db){
+    int x1 = 0, x2 = 0, x3 = 0;
+    x1 = fast_power(m, Ca, p);
+    x2 = fast_power(x1, Cb, p);
+    x3 = fast_power(x2, Da, p);
+    return x3;
 }
