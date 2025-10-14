@@ -120,6 +120,110 @@ int main()
             break;
         }
         case '6': {
+            // int p = 0, Ca = 0, Cb = 0, Da = 0, Db = 0;
+            // std::ifstream in("t.txt", std::ios::binary);
+            // std::ofstream out("out",std::ios::binary);
+        //     char m = 0;
+        //     int mode = 1;
+            
+        //     // in.get(m);
+        //     std::cout << "Original:" << (int)m << std::endl;   
+        //     std::cout << "1 for encrypt; 0 for decrypt:" << '\n';
+        //     std::cin >> mode;
+        //     if(mode){        
+        //     Set_keys(&p, &Ca, &Cb, &Da, &Db, 0);
+        //     Get_keys(&p, &Ca, &Cb, &Da, &Db);
+        //     std::string name;
+        //     std::cin >> name;
+        //     std::ifstream in(name, std::ios::binary);
+        //     std::ofstream out_e("out.e", std::ios::binary);
+        //     while(!in.eof()){
+        //         in.get(m);
+        //         char x = (char)Shamir_encrypt(m, p, Ca, Cb, Da);
+        //         // out.write((char)x,1);
+        //         out_e << x;
+        //     }
+        //     in.close();
+        //     out_e.close();
+        // }else{
+        //     std::ifstream in_d("out.e",std::ios::binary);
+        //     std::ofstream out_d("out.d", std::ios::binary);
+        //     char x3 = 0;
+        //     while(!in_d.eof()){
+        //         x3 = in_d.get();
+        //         out_d << Shamir_decrypt((int)x3, p,Db);
+        //     }
+        //     out_d.close();
+        //     in_d.close();
+        // }
+
+
+    int p, Ca, Cb, Da, Db;
+    int mode;
+    std::string input_file, output_file;
+
+    std::cout << "Выберите режим (0 - шифрование, 1 - расшифрование): ";
+    std::cin >> mode;
+    std::cout << "Введите имя входного файла: ";
+    std::cin >> input_file;
+    std::cout << "Введите имя выходного файла: ";
+    std::cin >> output_file;
+
+    if (mode == 0) {
+
+        Set_keys(&p, &Ca, &Cb, &Da, &Db, 0);
+
+        std::ifstream fin(input_file, std::ios::binary);
+        std::ofstream fout(output_file, std::ios::binary);
+
+        if (!fin || !fout) {
+            std::cerr << "Ошибка открытия файлов\n";
+            return 1;
+        }
+
+        char ch;
+        while (fin.get(ch)) {
+            int encrypted = Shamir_encrypt(ch, p, Ca, Cb, Da);
+            
+            fout.write(reinterpret_cast<char*>(&encrypted), sizeof(encrypted));
+        }
+
+        fin.close();
+        fout.close();
+        std::cout << "Шифрование завершено.\n";
+
+    } else if (mode == 1) {
+        Get_keys(&p, &Ca, &Cb, &Da, &Db);
+
+        std::ifstream fin(input_file, std::ios::binary);
+        std::ofstream fout(output_file);
+
+        if (!fin || !fout) {
+            std::cerr << "Ошибка открытия файлов\n";
+            return 1;
+        }
+
+        int encrypted_value;
+        while (fin.read(reinterpret_cast<char*>(&encrypted_value), sizeof(encrypted_value))) {
+            int decrypted = Shamir_decrypt(encrypted_value, p, Db);
+            char ch = static_cast<char>(decrypted);
+            fout.put(ch);
+        }
+
+        fin.close();
+        fout.close();
+        std::cout << "Расшифрование завершено.\n";
+
+    } else {
+        std::cerr << "Неверный режим.\n";
+        return 1;
+    }       
+            
+            // int x3 = Shamir_encrypt(m, p, Ca, Cb, Da);
+            // std::cout << "Crypt: " << x3 << std::endl;
+            // std::cout << "Decrypt: " << Shamir_decrypt(x3, p, Db) << std::endl;
+            
+            // std::cout << Da << "|" << Db;
             
             // p = 0;
             // int m = 0, Ca = 0, Cb = 0;

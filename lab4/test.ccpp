@@ -1,0 +1,13 @@
+#include <iostream>
+#include <fstream>
+
+
+int main(){
+    int x3 = 53
+    ;
+    char x = (char)x3;
+    std::cout << x;
+
+
+    return 0;
+}
