@@ -1,0 +1,16 @@
+#include <math.h>
+#include <random>
+#include <map>
+#include <iostream>
+#include <fstream>
+#include <cstdint>
+
+int fast_power(int a, int x, int p);
+int ferm(int p);
+int gen_euclid(int* x, int* y);
+int step(int a, int y, int p);
+int DH(int p, int g, int Xa, int Xb);
+int Shamir_encrypt(char m, int p, int Ca, int Cb, int Da);
+int Shamir_decrypt( int  x3, int p, int Db);
+int Set_keys(int* p, int* Ca, int* Cb, int* Da, int* Db, int type);
+int Get_keys(int *p, int *Ca, int *Cb, int *Da, int *Db);
