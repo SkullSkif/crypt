@@ -178,142 +178,10 @@ int DH(int p, int g, int Xa, int Xb)
     return 0;
 }
 
-// int Shamir_encrypt(int m, int p, int Ca, int Cb){
-//     int x1 = 0, x2 = 0, x3 = 0, x4 = 0, Da = 0, Db = 0;
-//     std::random_device rd;
-//     std::mt19937 gen(rd());
-//     std::uniform_int_distribution<> dist(1000, 1000000);
-//     int q = p-1;
-//     // for(int temp = dist(gen); gen_euclid(&temp, &q) != 1; temp = dist(gen)){
-//     //     Da = temp;
-//     // }
-//     int flag = 1;
-//     int res = 0;
-//     while(flag){
-//         int temp = dist(gen);
-//         Da = temp;
-//         res = gen_euclid(&temp, &q);
-//         if (res == 1){
-//             if(temp < 0)
-//                 Db = temp + (p-1);
-//             else
-//                 Db = temp;
-//             flag = 0;
-//         }
-//     }
-
-//     x1 = fast_power(m, Ca, p);
-//     x2 = fast_power(x1, Cb, p);
-//     x3 = fast_power(x2, Da, p);
-//     x4 = fast_power(x3, Db, p);
-//     if(x4==m)
-//         return 1;
-//     return 0;
-
-// }
-
-// int Set_keys(int *p, int *Ca, int *Cb, int *Da, int *Db, int type)
-// {
-//     std::ofstream alice("Alice");
-//     std::ofstream bob("Bob");
-//     std::ofstream p_key("P");
-//     std::random_device rd;
-//     std::mt19937 gen(rd());
-//     std::uniform_int_distribution<> dist(1, 255);
-//     std::uniform_int_distribution<> distp(1, 255);
-//     if (type)
-//     {
-
-//         int q = *p - 1;
-//         int flag = 1;
-//         int res = 0;
-  
-//         // *Da = dist(gen);
-//         // *Db = dist(gen);
-  
-//         while (flag)
-//         {
-//             int temp = dist(gen);
-//             *Da = temp;
-//             res = gen_euclid(&temp, &q);
-//             if (res == 1)
-//             {
-//                 if (temp < 0)
-//                     *Db = temp + (*p - 1);
-//                 else
-//                     *Db = temp;
-//                 flag = 0;
-//             }
-//         }
-//         alice << *Ca << '\n'
-//               << *Cb;
-//         bob << *Da << '\n'
-//             << *Db;
-//         p_key << *p;
-//     }
-//     else
-//     {
-//         *p = distp(gen);
-//         while (ferm(*p) <= 0)
-//         {
-//             *p = distp(gen);
-//         }
-//         *p = 67;
-//         int q = *p - 1;
-//         int flag = 1;
-//         int res = 0;
-//         while (flag)
-//         {
-
-//             int temp = dist(gen);
-//             *Ca = temp;
-//             res = gen_euclid(&temp, &q);
-//             if (res == 1)
-//             {
-//                 if (temp < 0)
-//                     *Cb = temp + (*p - 1);
-//                 else
-//                     *Cb = temp;
-//                 flag = 0;
-//             }
-//         }
-//         flag = 1;
-//         while (flag)
-//         {
-
-//             int temp = dist(gen);
-//             *Da = temp;
-//             res = gen_euclid(&temp, &q);
-//             if (res == 1)
-//             {
-//                 if (temp < 0)
-//                     *Db = temp + (*p - 1);
-//                 else
-//                     *Db = temp;
-//                 flag = 0;
-//             }
-//         }
-
-//         // *Ca = dist(gen);
-//         // *Cb = dist(gen);
-//         // *Da = dist(gen);
-//         // *Db = dist(gen);
-        
-//         alice << *Ca << '\n'
-//               << *Cb;
-//         bob << *Da << '\n'
-//             << *Db;
-//         p_key << *p;
-//     }
-//     bob.close();
-//     alice.close();
-//     p_key.close();
-//     return 0;
-// }
-
-
-int gcd(int a, int b, int *x, int *y) {
-    if (b == 0) {
+int gcd(int a, int b, int *x, int *y)
+{
+    if (b == 0)
+    {
         *x = 1;
         *y = 0;
         return a;
@@ -325,19 +193,23 @@ int gcd(int a, int b, int *x, int *y) {
     return d;
 }
 
-void generate_key_pair(int p, int &a, int &b) {
+void generate_key_pair(int p, int &a, int &b)
+{
     int q = p - 1;
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dist(1, q - 1);
 
-    while (true) {
+    while (true)
+    {
         a = dist(gen);
         int x, y;
         int g = gcd(a, q, &x, &y);
-        if (g == 1) {
+        if (g == 1)
+        {
             b = x % q;
-            if (b < 0) b += q;
+            if (b < 0)
+                b += q;
             break;
         }
     }
@@ -358,8 +230,10 @@ int Set_keys(int *p, int *Ca, int *Cb, int *Da, int *Db, int type)
 
         generate_key_pair(*p, *Da, *Db);
 
-        alice << *Ca << '\n' << *Cb;
-        bob << *Da << '\n' << *Db;
+        alice << *Ca << '\n'
+              << *Cb;
+        bob << *Da << '\n'
+            << *Db;
         p_key << *p;
     }
     else
@@ -376,8 +250,10 @@ int Set_keys(int *p, int *Ca, int *Cb, int *Da, int *Db, int type)
         generate_key_pair(*p, *Ca, *Cb);
         generate_key_pair(*p, *Da, *Db);
 
-        alice << *Ca << '\n' << *Cb;
-        bob << *Da << '\n' << *Db;
+        alice << *Ca << '\n'
+              << *Cb;
+        bob << *Da << '\n'
+            << *Db;
         p_key << *p;
     }
 
@@ -387,7 +263,6 @@ int Set_keys(int *p, int *Ca, int *Cb, int *Da, int *Db, int type)
 
     return 0;
 }
-
 
 int Get_keys(int *p, int *Ca, int *Cb, int *Da, int *Db)
 {
@@ -404,7 +279,7 @@ int Get_keys(int *p, int *Ca, int *Cb, int *Da, int *Db)
     return 0;
 }
 
-int  Shamir_encrypt(char m, int p, int Ca, int Cb, int Da)
+int Shamir_encrypt(char m, int p, int Ca, int Cb, int Da)
 {
     int x1 = 0, x2 = 0, x3 = 0;
     x1 = fast_power((int)m, Ca, p);
@@ -413,28 +288,32 @@ int  Shamir_encrypt(char m, int p, int Ca, int Cb, int Da)
     return x3;
 }
 
-int Shamir_decrypt( int  x3, int p, int Db)
+int Shamir_decrypt(int x3, int p, int Db)
 {
     return fast_power(x3, Db, p);
     ;
 }
 
-int Gamel_encrypt(int* a, int* b,int m, int g, int p, int k, int y){
+int Gamel_encrypt(int *a, int *b, int m, int g, int p, int k, int y)
+{
     *a = fast_power(g, k, p);
-    *b = m*fast_power(y,k,p);
+    *b = m * fast_power(y, k, p);
     return 0;
 }
 
-int Gamel_decrypt(int a, int b, int x, int p){
-    return b*fast_power(a, p-1-x, p);
+int Gamel_decrypt(int a, int b, int x, int p)
+{
+    return b * fast_power(a, p - 1 - x, p);
 }
 
-int Set_gamel_keys(int* p, int* g, int* x,int* y, int* k, int type){
+int Set_gamel_keys(int *p, int *g, int *x, int *y, int *k, int type)
+{
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dist(1, 1000000);
-    
-    if(type){
+
+    if (type)
+    {
         int flag = 1;
         int sofi = 0;
         while (flag)
@@ -453,16 +332,18 @@ int Set_gamel_keys(int* p, int* g, int* x,int* y, int* k, int type){
                 break;
             }
         }
+        // *p = 7; *g = 20;
         std::uniform_int_distribution<> distx(1, *p);
-        *x = distx(gen);
-        
 
         std::ofstream alice("Alice");
         std::ofstream bob("Bob");
         std::ofstream open_keys("Open");
-        
-        open_keys << *p << '\n' << *g;
+
+        open_keys << *p << '\n'
+                  << *g << '\n';
+        // std::cout << "| " << *g << " |\n";
         open_keys.close();
+        *x = distx(gen);
         bob << *x;
         std::ifstream bobreads("Open");
         bobreads >> *p;
@@ -472,19 +353,64 @@ int Set_gamel_keys(int* p, int* g, int* x,int* y, int* k, int type){
         std::ofstream open("Open", std::ios::app | std::ios::ate);
         open << *y;
         open.close();
-        
-        
-        std::uniform_int_distribution<> distp(1, *p-1);
+
+        // std::ofstream aliceAB("AliceAB");
+        std::uniform_int_distribution<> distp(1, *p - 1);
         *k = distp(gen);
         alice << *k;
-        std::ifstream
+        // std::ifstream openb("Open");
+        // while(!openb.eof()){
+        //     openb >> *y;
+        // }
+        // openb.close();
+        // alice.close();
+        // int a = fast_power(*g, *k, *p);
 
-    }else{
-        // p g x
-        std::uniform_int_distribution<> distp(1, *p-1);
-        *k = distp(gen);
-        *y =
-
+        // std::ifstream
     }
+    return 0;
+    // else{
+    //     // p g x
+    //     std::uniform_int_distribution<> distp(1, *p-1);
+    //     *k = distp(gen);
+    //     *y =
 
+    // }
+}
+
+int Gamel_encrypt(int m, int *a, int *b)
+{
+    std::ifstream open("Open");
+    std::ifstream alice("Alice");
+    int p = 0, g = 0, k = 0, y = 0;
+    open >> p >> g >> y;
+    alice >> k;
+    *a = fast_power(g, k, p);
+    *b = m * fast_power(y, k, p);
+    std::ofstream out("OUT.en");
+    out << *a << *b;
+    open.close();
+    alice.close();
+    out.close();
+    //  std::ifstream bob("Bob");
+    //  int x = 0;
+    //  bob >> x;
+    //  std::cout << ((*b * fast_power(*a, p-1-x, p)) % p) << '\n';
+    // std::cout << p << ' ' << g << ' ' << y;
+    return 0;
+}
+
+int Gamel_decrypt(int a, int b)
+{
+    std::ifstream bob("Bob");
+    int x = 0;
+    bob >> x;
+
+    int p = 0;
+    std::ifstream open("Open");
+    open >> p;
+    open.close();
+    bob.close();
+
+    return ((b * fast_power(a, p - 1 - x, p)) % p);
 }
