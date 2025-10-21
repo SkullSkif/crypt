@@ -229,9 +229,39 @@ int main()
             break;
         }
         case '8':{
-            int h = Set_RSA_keys();
+            int m = 0;
+            int type;
 
-
+            int mode;
+            std::cout << "Encrypt(1) or Decode(0)";
+            std::cin >> mode;
+            if(mode){
+            std::cout << "Generate(1) or Manuall(0):";
+            std::cin >> type;
+            Set_RSA_keys(type);
+            std::ifstream in_file("text.txt", std::ios::binary);
+            std::ofstream out_encrypted("OUT.en", std::ios::binary);
+            char ch = 0;
+            while(in_file.get(ch)){
+                m = static_cast<uint8_t>(ch);
+                RSA_encrypt(m, out_encrypted);
+            }
+            out_encrypted.close();
+            in_file.close();
+            }else{
+            std::ifstream bob_in("OUT.en", std::ios::binary);
+            std::ofstream bob_out("OUT.de", std::ios::binary);
+            std::ifstream bob_key("Bob");
+            std::ifstream open_key("Open");
+            int c, e, N;
+            bob_key >> c;
+            open_key >> N;
+            char res;
+            while(bob_in.read(reinterpret_cast<char*>(&e), sizeof(e))){
+                res = RSA_decrypt(e, c, N);
+                bob_out << res;
+            }
+        }
             
             break;
         }

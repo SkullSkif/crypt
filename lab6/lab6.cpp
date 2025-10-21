@@ -391,11 +391,21 @@ char Gamel_decrypt(int a, int b)
     return m;
 }
 
-int Set_RSA_keys(){
-    int P = 0, Q = 0;
+int forming_c(int d, int fi) {
+    int x, y;
+    int g = gcd(d, fi, &x, &y);
+    if (g != 1) {
+        return -1; 
+    }
+    return (x % fi + fi) % fi;  
+}
+
+void Set_RSA_keys(int type){
+    int P = 0, Q = 0, d = 0;
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dist(1, 100);
+    if(type){
     P = dist(gen);
     while(ferm(P)<=0)
         P = dist(gen);
@@ -407,48 +417,77 @@ int Set_RSA_keys(){
     int fi = (P-1)*(Q-1);
 
     std::uniform_int_distribution<> distD(1, fi);
-    int d = distD(gen);
+    d = distD(gen);
     int c1 = d;
     int c2 = fi;
-    int tempd, tempfi;
-    // while(gen_euclid(&c1, &c2)!=1)
-    std::cout << "AAAA" << std::endl;
-    for(tempd = distD(gen), tempfi = fi; gen_euclid(&tempd,&tempfi)!=1;tempd = distD(gen), tempfi = fi){
-        // tempfi = fi;
-        // d = tempd;
+    while (d < fi) {
+        if (gcd(d, fi, &c1, &c2) == 1) {
+            break;
+        }
+        d = distD(gen);
     }
-    d = tempd;
-    // int tempfi = fi;
-    // int tempd = d;
-    // while((gen_euclid(&tempd, &tempfi))!=1){
-    //     std::cout << "BBBB" << std::endl;
+    std::cout << "d: " << d << " fi: " << fi;
+    int c = forming_c(d, fi);
+    std::cout << " c: " << c << std::endl;
+
+    std::ofstream open_keys_write("Open");
+    open_keys_write << N << '\n' << d;
+    open_keys_write.close();
+
+    std::ofstream bob_key_write("Bob");
+    bob_key_write << c;
+    bob_key_write.close();
+}else{
+    std::cout << "Input p:";
+    std::cin >> P;
+    std::cout << "Input q:";
+    std::cin >> Q;
+    std::cout << "Input d:";
+    std::cin >> d;
+    int N = P*Q;
+    int fi = (P-1)*(Q-1);
+    // int c1 = d;
+    // int c2 = fi;
+    // std::uniform_int_distribution<> distD(1, fi);
+    // while (d < fi) {
+    //     if (gcd(d, fi, &c1, &c2) == 1) {
+    //         break;
+    //     }
     //     d = distD(gen);
-    //     tempd = d;
-    //     tempfi = fi;
-    //     std::cout << tempd << ' ' << fi << '|' << std::endl;
     // }
-    std::cout << d << ' ' << fi;
-    // int d = distD(gen);
-    // Ищем d, взаимно простое с fi и меньше fi
-    // srand(time(NULL));
-    // while (d < fi) {
-    //     if (gcd(d, fi, &c1, &c2) == 1) {
-    //         break;
-    //     }
-    //     d = rand() % 1000;
-    //     std::cout << d << " " << std::endl;
-    // }
+    std::cout << "d: " << d << " fi: " << fi;
+    int c = forming_c(d, fi);
+    std::cout << " c: " << c << std::endl;
 
-    // int d = 2;
-    // Ищем d, взаимно простое с fi и меньше fi
-    // while (d < fi) {
-    //     if (gcd(d, fi, &c1, &c2) == 1) {
-    //         break;
-    //     }
-    //     d++;
-    // }
+    std::ofstream open_keys_write("Open");
+    open_keys_write << N << '\n' << d;
+    open_keys_write.close();
 
+    std::ofstream bob_key_write("Bob");
+    bob_key_write << c;
+    bob_key_write.close();
+}
 
-    
-    return 0;
+}
+
+void RSA_encrypt(int m, std::ofstream& out){
+    std::ifstream in_alice("Open");
+    int N, d;
+    in_alice >> N >> d;
+    in_alice.close();
+    int e =  fast_power(m, d, N);
+    out.write(reinterpret_cast<const char*>(&e), sizeof(e));
+}
+
+char RSA_decrypt(int e, int c, int N){
+    // std::ifstream in("OUT.en", std::ios::binary);
+
+    // int c;
+    // bob_key >> c;
+    // open_key >> N;
+    // int e;
+    // in >> e;
+    char m = fast_power(e, c, N);
+    return m;
+
 }

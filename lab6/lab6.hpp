@@ -17,4 +17,6 @@ int Get_keys(int* p, int* Ca, int* Cb, int* Da, int* Db);
 int Set_gamel_keys(int* p, int* g, int* x, int* y, int* k, int type);
 int Gamel_encrypt(int m, std::ofstream& out);
 char Gamel_decrypt(int a, int b);
-int Set_RSA_keys();
+void Set_RSA_keys(int type);
+void RSA_encrypt(int m, std::ofstream& out);
+char RSA_decrypt(int e, int c, int N);
