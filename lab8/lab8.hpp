@@ -5,6 +5,7 @@
 #include <math.h>
 #include <random>
 
+
 int fast_power(int a, int x, int p);
 int ferm(int p);
 int gen_euclid(int* x, int* y);
@@ -24,3 +25,5 @@ void DH_setup();
 int DH_k(int person);
 void Vernam_encrypt(int k);
 void Vernam_decrypt(int k);
+void RSA_sign_encrypt();
+void RSA_sign_decrypt();

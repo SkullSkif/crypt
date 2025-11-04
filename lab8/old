@@ -427,9 +427,9 @@ void Set_RSA_keys(int type){
         }
         d = distD(gen);
     }
-    // std::cout << "d: " << d << " fi: " << fi;
+    std::cout << "d: " << d << " fi: " << fi;
     int c = forming_c(d, fi);
-    // std::cout << " c: " << c << std::endl;
+    std::cout << " c: " << c << std::endl;
 
     std::ofstream open_keys_write("Open");
     open_keys_write << N << '\n' << d;
@@ -583,12 +583,14 @@ void Vernam_decrypt(int k){
     file.close(); 
 }
 
-std::vector<unsigned char> MD5bytes(const std::string& str) {
-    std::string hex_str = md5(str);
+// Функция для получения сырых байтов MD5
+std::vector<unsigned char> get_md5_bytes(const std::string& str) {
+    std::string hex_digest = md5(str);  // Просто используем вашу готовую функцию
     
+    // Конвертируем hex в байты
     std::vector<unsigned char> bytes;
-    for (size_t i = 0; i < hex_str.length(); i += 2) {
-        std::string byte_string = hex_str.substr(i, 2);
+    for (size_t i = 0; i < hex_digest.length(); i += 2) {
+        std::string byte_string = hex_digest.substr(i, 2);
         unsigned char byte = static_cast<unsigned char>(std::stoul(byte_string, nullptr, 16));
         bytes.push_back(byte);
     }
@@ -604,13 +606,17 @@ void RSA_sign_encrypt(){
         m += m_ + '\n';
     } 
     file.close();
+    // std::string h = md5(m);
+    // std::cout << h;
 
-    std::vector<unsigned char> bytes = MD5bytes(m);
+
+    std::vector<unsigned char> hash_bytes = get_md5_bytes(m);
     
-    // for (auto b : hash_bytes) {
-    //     std::cout << std::hex << (int)b << " ";
-    // }
-    // std::cout << std::endl;
+    std::cout << "Hash bytes: ";
+    for (auto b : hash_bytes) {
+        std::cout << std::hex << (int)b << " ";
+    }
+    std::cout << std::endl;
 
 
     Set_RSA_keys(1);
@@ -622,10 +628,17 @@ void RSA_sign_encrypt(){
     closed_key.close();
     open_key.close();
     std::ofstream sign("Sign");
+    // char s;
+    // for(auto hb : h){
+    //     s = (char)fast_power(hb, c, N);
+    //     sign << s;
+    // }
 
-    for(unsigned char hb : bytes) {
+
+    for(unsigned char hb : hash_bytes) {
         int encrypted = fast_power(static_cast<int>(hb), c, N);
         sign << encrypted << " ";
+        // std::cout << "Byte: " << (int)hb << " -> Encrypted: " << encrypted << std::endl;
     }    
 
 
@@ -640,28 +653,49 @@ void RSA_sign_decrypt(){
         m += m_ + '\n';
     } 
     file.close();
-    std::vector<unsigned char> hash_bytes = MD5bytes(m);
+    // std::string h = md5(m);
+    std::vector<unsigned char> original_hash = get_md5_bytes(m);
+
+    // std::ifstream sign("Sign");
+    // std::string s;
+    // sign >> s;
+    // sign.close();
 
     std::ifstream sign("Sign");
-    std::vector<int> signed_hash;
-    int signed_hash_element;
-    while(sign >> signed_hash_element) {
-        signed_hash.push_back(signed_hash_element);
+    std::vector<int> signature;
+    int sig_val;
+    while(sign >> sig_val) {
+        signature.push_back(sig_val);
     }
     sign.close();
     
+    
+
     std::ifstream open_key("Open");
     int d, N;
     open_key >> N;
     open_key >> d;
     open_key.close();
+
+    // std::ofstream unsign("Unsigned");
+    // char e;
+    // for(auto sb : s){
+    //     e = (char)fast_power(sb, d, N);
+    //     unsign << e;
+    // }
+    // unsign.close();
+
+    bool valid = true;
+    std::cout << "Verification process:" << std::endl;
     
-    for(size_t i = 0; i < signed_hash.size(); i++) {
-        int decrypted = fast_power(signed_hash[i], d, N);
-        std::cout << decrypted << ':' << (int)hash_bytes[i] << std::endl;
+    for(size_t i = 0; i < signature.size(); i++) {
+        int decrypted = fast_power(signature[i], d, N);
+        std::cout << "Signature[" << i << "]: " << signature[i] 
+                  << " -> Decrypted: " << decrypted 
+                  << " vs Original: " << (int)original_hash[i] << std::endl;
         
-        if(decrypted != static_cast<int>(hash_bytes[i])) {
-            std::cout << "incorrect decrypt: " << i << std::endl;
+        if(decrypted != static_cast<int>(original_hash[i])) {
+            std::cout << "incorrect  " << i << std::endl;
             break;
         }
     }    
