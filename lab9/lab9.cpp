@@ -722,10 +722,9 @@ void Set_sign_gamel_keys()
     open << y;
     open.close();
 
-    std::uniform_int_distribution<> distk(1, p - 2); // k от 1 до p-2
+    std::uniform_int_distribution<> distk(1, p - 2);
     k = distk(gen);
     
-    // Гарантируем, что k взаимно просто с (p-1)
     int c1,c2;
     while (gcd(k, p-1,&c1,&c2) != 1) {
         k = distk(gen);
@@ -735,131 +734,7 @@ void Set_sign_gamel_keys()
     int r = fast_power(g, k, p);
     alice << r;
     alice.close();
-    std::cout << "Generated keys: p=" << p << ", g=" << g 
-              << ", x=" << x << ", y=" << y << ", k=" << k 
-              << ", r=" << r << std::endl;
-    int k_inv = invert_c(k, p-1);
-    if (k_inv == -1) {
-        std::cout << "ERROR: k is not invertible mod (p-1)" << std::endl;
-    } else {
-        std::cout << "k inverse mod (p-1): " << k_inv << std::endl;
-    }
 }
-
-// void Gamel_sign_encrypt()
-// {
-//     std::ifstream file("text.txt");
-
-//     std::string m, m_;
-//     while (std::getline(file, m_)) {
-//         m += m_ + '\n';
-//     }
-//     file.close();
-
-//     std::vector<unsigned char> bytes = MD5bytes(m);
-//     Set_sign_gamel_keys();
-//     std::ifstream closed_keys("Alice");
-//     int x, k, r;
-//     closed_keys >> x >> k >> r;
-//     closed_keys.close();
-//     std::ifstream open_keys("Open");
-//     int p;
-//     open_keys >> p;
-//     open_keys.close();
-//     int s, u;
-//     std::ofstream sign("Sign");
-//     sign << r << " ";
-//     // for (unsigned char hb : bytes) {
-//     //     u = (static_cast<int>(hb) - x * r) % (p-1);
-//     //     // s = (invert_c(k, (p-1)) * u) % (p-1);
-//     //     s = invert_c(k, (p-1)) * (u % (p-1));
-
-//     //     sign << s << " ";
-//     //     // int encrypted = fast_power(static_cast<int>(hb), c, N);
-//     //     // sign << encrypted << " ";
-//     // }
-//     for (unsigned char hb : bytes) {
-//         int H = static_cast<int>(hb);
-        
-//         // ПРАВИЛЬНАЯ формула подписи
-//         int s = (invert_c(k, p-1) * (H - x * r)) % (p-1);
-//         if (s < 0) s += (p-1); // гарантируем положительность
-        
-//         sign << s << " ";
-//     }
-
-
-
-//     sign.close();
-// }
-
-// void Gamel_sign_decrypt(){
-
-//     std::ifstream file("text.txt");
-//     int p, g, y;
-//     std::string m, m_;
-//     while (std::getline(file, m_)) {
-//         m += m_ + '\n';
-//     }
-//     file.close();
-//     std::vector<unsigned char> hash_bytes = MD5bytes(m);
-
-//     std::ifstream sign("Sign");
-//     int r;
-//     sign >> r;
-
-//     std::vector<int> signed_hash;
-//     int signed_hash_element;
-//     while (sign >> signed_hash_element) {
-//         signed_hash.push_back(signed_hash_element);
-//     }
-
-
-
-//     // for (const auto& element : signed_hash) {
-//     //     std::cout << element << " ";
-//     // }
-
-
-
-//     sign.close();    
-//     std::ifstream open("Open");
-//     open >> p >> g >> y;
-
-
-//     // for (size_t i = 0; i < signed_hash.size(); i++) {
-//     //     // int decrypted = fast_power(signed_hash[i], d, N);
-//     //     // std::cout << decrypted << ':' << (int)hash_bytes[i] << std::endl;
-//     //     int decrypt_l = pow(y, r) * pow(r, signed_hash[i]);
-//     //     int decrypt_r = fast_power(g, static_cast<int>(hash_bytes[i]), p);
-
-//     //     if (decrypt_l != decrypt_r) {
-//     //         std::cout << "incorrect decrypt: " << i << std::endl;
-//     //         break;
-//     //     }
-//     // }
-
-//     for (size_t i = 0; i < signed_hash.size(); i++) {
-//         int H = static_cast<int>(hash_bytes[i]);
-//         int s = signed_hash[i];
-        
-//         // ПРАВИЛЬНАЯ проверка с модульной арифметикой
-//         int left_side = fast_power(g, H, p);
-        
-//         int y_pow_r = fast_power(y, r, p);
-//         int r_pow_s = fast_power(r, s, p);
-//         int right_side = (y_pow_r * r_pow_s) % p;
-        
-//         if (left_side != right_side) {
-//             std::cout << "incorrect decrypt: " << i << std::endl;
-//             std::cout << "Expected: " << left_side << std::endl;
-//             std::cout << "Got: " << right_side << std::endl;
-//             break;
-//         }
-//     }
-
-//     open.close();
-// }
 
 void Gamel_sign_encrypt()
 {
@@ -889,9 +764,8 @@ void Gamel_sign_encrypt()
     for (unsigned char hb : bytes) {
         int H = static_cast<int>(hb);
         
-        // ПРАВИЛЬНАЯ формула с обработкой отрицательных значений
         int u = (H - x * r) % (p-1);
-        if (u < 0) u += (p-1); // важно!
+        if (u < 0) u += (p-1); 
         
         int k_inv = invert_c(k, p-1);
         if (k_inv == -1) {
@@ -900,7 +774,7 @@ void Gamel_sign_encrypt()
         }
         
         int s = (k_inv * u) % (p-1);
-        if (s < 0) s += (p-1); // важно!
+        if (s < 0) s += (p-1);
         
         sign << s << " ";
     }
@@ -934,23 +808,20 @@ void Gamel_sign_decrypt()
     open.close();
 
     for (size_t i = 0; i < signed_hash.size(); i++) {
-        int H = static_cast<int>(hash_bytes[i]);
+        int hb = static_cast<int>(hash_bytes[i]);
         int s = signed_hash[i];
         
-        // ПРАВИЛЬНАЯ проверка
-        int left_side = fast_power(g, H, p);
+        int decrypt_l = fast_power(g, hb, p);
         
-        int y_pow_r = fast_power(y, r, p);
-        int r_pow_s = fast_power(r, s, p);
-        int right_side = (y_pow_r * r_pow_s) % p;
+        int ypow = fast_power(y, r, p);
+        int rpow = fast_power(r, s, p);
+        int decrypt_r = (ypow * rpow) % p;
         
-        std::cout << "Byte " << i << ": H=" << H 
-                  << ", left=" << left_side 
-                  << ", right=" << right_side << std::endl;
+        std::cout << "byte: " << i << "[" << decrypt_l 
+                  << " | " << decrypt_r << "]" << std::endl;
         
-        if (left_side != right_side) {
+        if (decrypt_l != decrypt_r) {
             std::cout << "incorrect decrypt: " << i << std::endl;
-            // Не прерываем сразу, чтобы увидеть все результаты
         }
     }
 }
