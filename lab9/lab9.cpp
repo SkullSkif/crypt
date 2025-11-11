@@ -768,10 +768,6 @@ void Gamel_sign_encrypt()
         if (u < 0) u += (p-1); 
         
         int k_inv = invert_c(k, p-1);
-        if (k_inv == -1) {
-            std::cout << "Error: k not invertible" << std::endl;
-            return;
-        }
         
         int s = (k_inv * u) % (p-1);
         if (s < 0) s += (p-1);
