@@ -27,4 +27,6 @@ void Vernam_encrypt(int k);
 void Vernam_decrypt(int k);
 void RSA_sign_encrypt();
 void RSA_sign_decrypt();
-int Set_sign_gamel_keys();
+void Set_sign_gamel_keys();
+void Gamel_sign_encrypt();
+void Gamel_sign_decrypt();

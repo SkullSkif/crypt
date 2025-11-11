@@ -13,7 +13,7 @@ int main()
     int a = 0, x = 0, p = 0, res = 0, y = 0, b = 0;
     while (flag) {
         std::cout << "Choose task: \n\t1: Fast_power\n\t2: Ferma\n\t3: "
-                     "Euclid\n\t4: Shanks step\n\t5: DH sys:\n\t6: Shamir\n\t7: Gamel\n\t8: RSA\n\t9: Vernam\n\tR: RSA sign\n";
+                     "Euclid\n\t4: Shanks step\n\t5: DH sys:\n\t6: Shamir\n\t7: Gamel\n\t8: RSA\n\t9: Vernam\n\tR: RSA sign\n\tG: Gamel sign";
         std::cin >> input;
         switch (input) {
         case '1': {
@@ -290,6 +290,17 @@ int main()
             RSA_sign_encrypt();
             }else{
                 RSA_sign_decrypt();
+            }
+            break;
+        }
+        case 'G':{
+            int type = 0;
+            std::cout << "Encrypt(1) or Decrypt(0)?";
+            std::cin >> type;  
+            if(type){          
+            Gamel_sign_encrypt();
+            }else{
+                Gamel_sign_decrypt();
             }
             break;
         }
