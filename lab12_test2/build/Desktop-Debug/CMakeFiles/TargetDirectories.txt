@@ -1,0 +1,9 @@
+/home/vlad/lab12_test2/build/Desktop-Debug/CMakeFiles/lab12_test2.dir
+/home/vlad/lab12_test2/build/Desktop-Debug/CMakeFiles/edit_cache.dir
+/home/vlad/lab12_test2/build/Desktop-Debug/CMakeFiles/rebuild_cache.dir
+/home/vlad/lab12_test2/build/Desktop-Debug/CMakeFiles/list_install_components.dir
+/home/vlad/lab12_test2/build/Desktop-Debug/CMakeFiles/install.dir
+/home/vlad/lab12_test2/build/Desktop-Debug/CMakeFiles/install/local.dir
+/home/vlad/lab12_test2/build/Desktop-Debug/CMakeFiles/install/strip.dir
+/home/vlad/lab12_test2/build/Desktop-Debug/CMakeFiles/lab12_test2_autogen_timestamp_deps.dir
+/home/vlad/lab12_test2/build/Desktop-Debug/CMakeFiles/lab12_test2_autogen.dir
